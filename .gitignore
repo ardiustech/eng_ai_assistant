@@ -1,0 +1,5 @@
+# Ignore environment variables
+.env
+
+# Ignore temporary Playwright scripts
+tmp/ 

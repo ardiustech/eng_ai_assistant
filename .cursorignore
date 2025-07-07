@@ -1,0 +1,2 @@
+# Ignore environment files when sending to models
+.env 

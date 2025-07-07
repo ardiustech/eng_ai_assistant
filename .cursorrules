@@ -1,0 +1,10 @@
+# Cursor Rules
+
+1. Each web service requiring new automation gets its own subdirectory under `services/`.
+   - Store Playwright scripts and service-specific context here for reuse.
+2. Secrets (login credentials, API keys) must be stored in a `.env` file.
+   - `.env` is gitignored and cursorignored.
+   - Load secrets via scripts or terminal commands using `dotenv` to avoid leaking credentials.
+3. Use Playwright for browser control.
+   - Place temporary scripts in `tmp/` (gitignored); these can be thrown away.
+   - Reusable scripts (e.g., login flows) should be saved in the appropriate service subdirectory. 
