@@ -1,10 +1,45 @@
 # Cursor Rules
 
-1. Each web service requiring new automation gets its own subdirectory under `services/`.
-   - Store Playwright scripts and service-specific context here for reuse.
+1. Each skill for AI assistant automation gets its own subdirectory under `skills/`.
+   - Store Playwright scripts, automation rules, and skill-specific context here for reuse.
+   - Skills contain a mixture of scripts, documentation, and rules for agents to follow.
+   - Each skill should always use accumulated learnings and best practices.
 2. Secrets (login credentials, API keys) must be stored in a `.env` file.
    - `.env` is gitignored and cursorignored.
    - Load secrets via scripts or terminal commands using `dotenv` to avoid leaking credentials.
 3. Use Playwright for browser control.
    - Place temporary scripts in `tmp/` (gitignored); these can be thrown away.
-   - Reusable scripts (e.g., login flows) should be saved in the appropriate service subdirectory. 
+   - Reusable scripts (e.g., login flows) should be saved in the appropriate skill subdirectory.
+4. Browser automation architecture:
+   - Use Microsoft Edge remote debugging (port 9222) for shared authenticated sessions
+   - Detect existing Edge instances by HTTP requesting http://localhost:9222/json/version before launching
+   - Use Playwright's chromium.connectOverCDP() to connect to remote debugging sessions
+   - Single package.json at repo root, shared BrowserHelper class in `lib/`
+   - Handle graceful degradation when browser APIs aren't available by wrapping in try-catch
+   - Always add explicit process.exit() in Node.js automation scripts: main().then(() => process.exit(0)).catch(error => process.exit(1))
+   - Note: New tabs may not inherit all authentication cookies - implement manual auth flows when needed
+5. Handle app launch redirects by detecting and clicking "open in browser" links rather than trying to prevent app launches
+6. For debugging browser automation, create debug scripts in `tmp/` that examine page state, take screenshots, and use shorter timeouts
+   - Use shorter navigation timeouts (5-8s) to handle redirect scenarios without long waits
+   - Common issues: CORS errors requiring --disable-web-security flag, stealth detection (remove anti-bot measures)
+   - Check for redirect pages first, then examine available UI elements rather than assuming expected selectors exist
+   - Set appropriate viewport size (1920x1080) to ensure all elements are visible
+   - Implement scrolling when elements might be outside viewport
+   - Verify content after typing/pasting (check length, take screenshots)
+   - Use character-by-character typing with natural delays when text parsers need to be triggered
+   - Create iterative test scripts to isolate specific formatting/behavior issues 
+7. Skills architecture and best practices:
+   - For Slack automation, refer to `skills/gusto-slack/slack-automation-rules.md` for detailed formatting and automation guidelines
+   - Each skill should maintain its own automation rules document for skill-specific quirks and best practices
+   - Skills should be modular - extract general learnings to `lib/` for reuse across skills
+   - Skills can interact with webapps (scraping + interactions) or REST APIs
+   - Skills should accumulate learnings over time and document best practices
+8. Temporary file management:
+   - Clean up temporary test scripts in `tmp/` after task completion
+   - Document successful approaches before deleting temporary files
+   - Move reusable patterns from `tmp/` to appropriate skill directories or `lib/` for broader reuse
+9. Content creation automation:
+   - Extract reference formats from existing examples (Slack threads, documents, etc.)
+   - Verify formatting through iterative testing before final posting
+   - Use manual testing to confirm automation approach matches expected behavior
+   - Always capture "before send" and "after send" screenshots for verification 
