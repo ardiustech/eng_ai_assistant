@@ -51,20 +51,26 @@ async function postAnnouncement() {
     console.log('✍️ Typing announcement...');
     let inBulletMode = false;
     let currentBulletLevel = 0;
+    let inNumberedListMode = false;
     
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       const raw = line.trim();
       
       if (!raw) {
-        // Empty line - handle differently based on bullet mode
+        // Empty line - handle differently based on bullet/numbered mode
         if (inBulletMode) {
           // In bullet mode, empty lines can cause level changes or exit bullet mode
           // Skip empty lines while in bullet mode to maintain state consistency
           console.log('🔍 Skipping empty line while in bullet mode to maintain state');
           continue;
+        } else if (inNumberedListMode) {
+          // In numbered list mode, empty lines can cause issues
+          // Skip empty lines while in numbered list mode to maintain state consistency
+          console.log('🔍 Skipping empty line while in numbered list mode to maintain state');
+          continue;
         } else {
-          // Not in bullet mode - add newline normally
+          // Not in bullet or numbered mode - add newline normally
           await page.keyboard.down('Shift');
           await page.keyboard.press('Enter');
           await page.keyboard.up('Shift');
@@ -75,6 +81,10 @@ async function postAnnouncement() {
       // Detect bullet level by counting leading tabs in original line
       const leadingTabs = line.match(/^\t*/)[0].length;
       const isBullet = raw.startsWith('- ') || raw.startsWith('• ');
+      
+      // Detect numbered list items (e.g., "1. ", "2. ", etc.)
+      const numberedListMatch = raw.match(/^(\d+)\.\s+(.*)$/);
+      const isNumberedList = numberedListMatch !== null;
       
       if (isBullet) {
         // Bullet point
@@ -165,6 +175,51 @@ async function postAnnouncement() {
             await page.waitForTimeout(250);
           }
         }
+      } else if (isNumberedList) {
+        // Numbered list item
+        const itemNumber = numberedListMatch[1];
+        const itemContent = numberedListMatch[2];
+        
+        // Add logging for numbered list tracking
+        if (itemContent.includes('Monitor Performance') || itemContent.includes('Gather Feedback')) {
+          console.log(`\n🔍 NUMBERED: Line ${i + 1}: "${itemContent}"`);
+          console.log(`🔍 Number: ${itemNumber}, In numbered mode: ${inNumberedListMode}`);
+        }
+        
+        if (inBulletMode) {
+          // Exit bullet mode first
+          console.log(`🔍 Exiting bullet mode for numbered list`);
+          await page.keyboard.down('Shift');
+          await page.keyboard.press('Enter');
+          await page.keyboard.up('Shift');
+          await page.keyboard.press('Backspace');
+          inBulletMode = false;
+          currentBulletLevel = 0;
+          
+          // Add blank line for readability
+          await page.keyboard.down('Shift');
+          await page.keyboard.press('Enter');
+          await page.keyboard.up('Shift');
+        }
+        
+        if (itemNumber === '1') {
+          // First numbered item - keep the number to start numbered list mode
+          if (itemContent.includes('Monitor Performance')) {
+            console.log(`🔍 Starting numbered list mode with: "1. ${itemContent}"`);
+          }
+          await page.keyboard.type(`1. ${itemContent}`, { delay: config.delays.typingMin });
+          inNumberedListMode = true;
+        } else {
+          // Subsequent numbered items - strip the number, Slack will add it automatically
+          if (itemContent.includes('Gather Feedback')) {
+            console.log(`🔍 Continuing numbered list (${itemNumber} -> auto): "${itemContent}"`);
+          }
+          // Just do Shift+Enter to continue the numbered list
+          await page.keyboard.down('Shift');
+          await page.keyboard.press('Enter');
+          await page.keyboard.up('Shift');
+          await page.keyboard.type(itemContent, { delay: config.delays.typingMin });
+        }
       } else {
         // Regular line (header, text, etc.)
         if (inBulletMode) {
@@ -183,6 +238,17 @@ async function postAnnouncement() {
           await page.keyboard.press('Enter');
           await page.keyboard.up('Shift');
           console.log(`🔍 Exited bullet mode successfully`);
+        }
+        
+        if (inNumberedListMode) {
+          // Exit numbered list mode for regular lines
+          console.log(`🔍 Exiting numbered list mode for regular line: "${raw.substring(0, 50)}..."`);
+          inNumberedListMode = false;
+          
+          // Add blank line for readability
+          await page.keyboard.down('Shift');
+          await page.keyboard.press('Enter');
+          await page.keyboard.up('Shift');
         }
         
         await page.keyboard.type(raw, { delay: config.delays.typingMin });
