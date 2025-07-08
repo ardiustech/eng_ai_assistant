@@ -58,17 +58,35 @@ async function postAnnouncement() {
       const raw = line.trim();
       
       if (!raw) {
-        // Empty line - handle differently based on bullet/numbered mode
+        // Empty line - exit bullet/numbered mode first, then add the empty line
         if (inBulletMode) {
-          // In bullet mode, empty lines can cause level changes or exit bullet mode
-          // Skip empty lines while in bullet mode to maintain state consistency
-          console.log('🔍 Skipping empty line while in bullet mode to maintain state');
-          continue;
+          // Exit bullet mode first to preserve the empty line in final output
+          console.log('🔍 Empty line found - exiting bullet mode to preserve spacing');
+          await page.keyboard.down('Shift');
+          await page.keyboard.press('Enter');
+          await page.keyboard.up('Shift');
+          await page.keyboard.press('Backspace');
+          inBulletMode = false;
+          currentBulletLevel = 0;
+          console.log('🔍 Exited bullet mode for empty line');
+          
+          // Now add the empty line normally
+          await page.keyboard.down('Shift');
+          await page.keyboard.press('Enter');
+          await page.keyboard.up('Shift');
         } else if (inNumberedListMode) {
-          // In numbered list mode, empty lines can cause issues
-          // Skip empty lines while in numbered list mode to maintain state consistency
-          console.log('🔍 Skipping empty line while in numbered list mode to maintain state');
-          continue;
+          // Exit numbered list mode first to preserve the empty line in final output
+          console.log('🔍 Empty line found - exiting numbered list mode to preserve spacing');
+          inNumberedListMode = false;
+          
+          // Add blank line for readability and the actual empty line
+          await page.keyboard.down('Shift');
+          await page.keyboard.press('Enter');
+          await page.keyboard.up('Shift');
+          await page.keyboard.down('Shift');
+          await page.keyboard.press('Enter');
+          await page.keyboard.up('Shift');
+          console.log('🔍 Exited numbered list mode for empty line');
         } else {
           // Not in bullet or numbered mode - add newline normally
           await page.keyboard.down('Shift');
