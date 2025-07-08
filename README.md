@@ -39,11 +39,12 @@ Automated retrieval and posting of information from/to Gusto's Slack instance us
 - Proper process exit handling (no hanging processes)
 - Advanced Slack message formatting automation:
   - Bold text with markdown parsing
-  - Auto-formatted bullet and numbered lists with proper nesting (Tab/Shift+Tab navigation)
+  - Auto-formatted bullet lists with proper nesting (Tab/Shift+Tab navigation)
+  - Auto-formatted numbered lists with duplicate number prevention
   - Multi-line message composition with strategic timing delays
   - Emoji shortcut support
   - Content verification before sending
-  - Robust bullet mode state management for complex nested structures
+  - Robust bullet and numbered list state management for complex structures
 - **Announcement Posting**: Service to post multi-line announcements in DM channels with natural typing delays and proper bullet formatting
 
 **Quick Start:**
