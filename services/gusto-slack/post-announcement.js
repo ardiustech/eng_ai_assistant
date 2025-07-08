@@ -57,10 +57,18 @@ async function postAnnouncement() {
       const raw = line.trim();
       
       if (!raw) {
-        // Empty line - just add newline
-        await page.keyboard.down('Shift');
-        await page.keyboard.press('Enter');
-        await page.keyboard.up('Shift');
+        // Empty line - handle differently based on bullet mode
+        if (inBulletMode) {
+          // In bullet mode, empty lines can cause level changes or exit bullet mode
+          // Skip empty lines while in bullet mode to maintain state consistency
+          console.log('🔍 Skipping empty line while in bullet mode to maintain state');
+          continue;
+        } else {
+          // Not in bullet mode - add newline normally
+          await page.keyboard.down('Shift');
+          await page.keyboard.press('Enter');
+          await page.keyboard.up('Shift');
+        }
         continue;
       }
       
@@ -72,8 +80,8 @@ async function postAnnouncement() {
         // Bullet point
         const textBody = raw.slice(2).trim();
         
-        // Add logging for Expected Impact section
-        if (textBody.includes('Near-term') || textBody.includes('Long-term') || textBody.includes('Accuracy') || textBody.includes('Customer Trust')) {
+        // Add logging for key sections to track bullet state
+        if (textBody.includes('Near-term') || textBody.includes('Long-term') || textBody.includes('Accuracy') || textBody.includes('Customer Trust') || textBody.includes('Inaccurate Estimates') || textBody.includes('Data Inconsistency')) {
           console.log(`\n🔍 BULLET: Line ${i + 1}: "${textBody}"`);
           console.log(`🔍 Bullet mode: ${inBulletMode}, Level: ${currentBulletLevel}, Target level: ${leadingTabs}`);
         }
@@ -161,6 +169,8 @@ async function postAnnouncement() {
         // Regular line (header, text, etc.)
         if (inBulletMode) {
           // Exit bullet mode: first do shift+enter, then immediately backspace
+          console.log(`\n🔍 Exiting bullet mode for regular line: "${raw.substring(0, 50)}..."`);
+          console.log(`🔍 Current bullet state: mode=${inBulletMode}, level=${currentBulletLevel}`);
           await page.keyboard.down('Shift');
           await page.keyboard.press('Enter');
           await page.keyboard.up('Shift');
@@ -172,6 +182,7 @@ async function postAnnouncement() {
           await page.keyboard.down('Shift');
           await page.keyboard.press('Enter');
           await page.keyboard.up('Shift');
+          console.log(`🔍 Exited bullet mode successfully`);
         }
         
         await page.keyboard.type(raw, { delay: config.delays.typingMin });
