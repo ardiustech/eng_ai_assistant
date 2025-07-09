@@ -4,6 +4,7 @@
    - Store Playwright scripts, automation rules, and skill-specific context here for reuse.
    - Skills contain a mixture of scripts, documentation, and rules for agents to follow.
    - Each skill should always use accumulated learnings and best practices.
+   - Use `.cursor/` directory within each skill for storing learnings, automation rules, best practices, and prompts.
 2. Secrets (login credentials, API keys) must be stored in a `.env` file.
    - `.env` is gitignored and cursorignored.
    - Load secrets via scripts or terminal commands using `dotenv` to avoid leaking credentials.
@@ -43,3 +44,16 @@
    - Verify formatting through iterative testing before final posting
    - Use manual testing to confirm automation approach matches expected behavior
    - Always capture "before send" and "after send" screenshots for verification 
+10. Unified context storage:
+    - All skills and repo-specific context must use the `.cursor/` directory pattern for storing learnings, automation rules, best practices, and prompts.
+    - This ensures consistent organization and helps agents locate relevant context across the entire repository.
+    - For external repo management under `repos/`, each repo should have its own `.cursor/` directory for repo-specific context.
+    - Skills should maintain their context in `skills/<skill-name>/.cursor/` while repo-specific context goes in `repos/<repo-name>/.cursor/`. 
+11. Persistent tool usage learnings:
+    - Document all tool usage patterns, failures, and successful workarounds in relevant `.cursor/` directories to prevent future agents from repeating the same mistakes.
+    - Common learnings to capture: authentication failures and solutions (e.g., SAML-protected repos requiring SSH instead of HTTPS), API rate limits and handling, environment-specific issues, successful command patterns.
+    - When encountering tool failures, always document both the failure and the successful workaround in the appropriate learnings file.
+    - For general tool usage issues that apply across all projects, document in `.cursor/learnings.md` at the repository root.
+    - For repository access issues, document the successful authentication method in `repos/<repo-name>/.cursor/learnings.md`.
+    - For skill-specific tool issues, document solutions in `skills/<skill-name>/.cursor/learnings.md`.
+    - Include specific examples and commands that work to help future agents avoid trial-and-error approaches. 

@@ -32,4 +32,10 @@ yarn-error.log*
 # Ignore document files (temporary)
 *.docx
 *.doc
-*.pdf 
+*.pdf
+
+# Ignore code checkouts in repos (but keep .cursor/ directories for context)
+repos/*/code/
+
+# Keep .cursor/ directories at all levels for accumulated learnings and context
+# (root .cursor/ for general learnings, skills/.cursor/ for skill-specific, repos/.cursor/ for repo-specific) 
