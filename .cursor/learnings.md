@@ -44,4 +44,36 @@ git clone git@github.com:ardiustech/mithrin.git
 
 ## Environment-Specific Issues
 
-*Document OS-specific, shell-specific, or environment-specific tool behaviors here as they are discovered* 
+*Document OS-specific, shell-specific, or environment-specific tool behaviors here as they are discovered*
+
+## Temporary File Management
+
+### Debugging File Cleanup
+**Issue**: Debugging and iteration processes generate significant temporary files (screenshots, test scripts, logs) that accumulate in `tmp/` directory.
+
+**Best Practice**: Clean up temporary files after completing tasks, but preserve valuable patterns as learnings.
+
+**Cleanup Strategy**:
+```bash
+# Before cleanup - preserve valuable patterns in .cursor/learnings.md
+# Extract useful techniques from debugging scripts
+# Document debugging workflows and patterns
+
+# After documentation - clean up temporary files
+rm -f tmp/*.png tmp/*.js tmp/*.log tmp/*.txt
+
+# Verify cleanup
+du -sh tmp/  # Should show minimal size
+```
+
+**Preservation Guidelines**:
+- Extract automation patterns (selectors, timing, error handling)
+- Document debugging workflows and techniques
+- Preserve configuration examples and working code snippets
+- Save error patterns and their solutions to relevant skill learnings
+- Clean up once patterns are documented in appropriate `.cursor/` directories
+
+**File Size Impact**: 
+- Debugging sessions can generate 5-10MB of temporary files
+- Screenshots alone can be 200-400KB each
+- Regular cleanup prevents repository bloat and improves performance 

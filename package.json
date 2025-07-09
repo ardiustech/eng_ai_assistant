@@ -1,20 +1,46 @@
 {
   "name": "eng-ai-assistant",
   "version": "1.0.0",
-  "description": "Eng AI Assistant skills for browser automation and web service interactions",
+  "description": "AI Assistant automation framework for browser automation, web service interactions, and development workflows",
   "main": "index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "install-browsers": "npx playwright install",
+    "setup": "npm install && npm run install-browsers",
+    "validate": "node scripts/validate-framework.js",
+    "health-check": "node scripts/health-check.js",
+    
     "gusto-slack": "node skills/gusto-slack/slack-retriever.js",
     "gusto-slack-test": "node skills/gusto-slack/test-connection.js",
     "gusto-slack-post": "node skills/gusto-slack/post-announcement.js",
+    
     "google-docs": "node skills/google-docs/google-docs-retriever.js",
     "google-docs-test": "node skills/google-docs/test-connection.js",
+    
     "gusto-jira": "node skills/gusto-jira/jira-retriever.js",
-    "gusto-jira-test": "node skills/gusto-jira/test-connection.js"
+    "gusto-jira-test": "node skills/gusto-jira/test-connection.js",
+    
+    "test-all-skills": "npm run gusto-slack-test && npm run google-docs-test && npm run gusto-jira-test",
+    "list-repos": "./repos/list-repos.sh",
+    "setup-branch": "./repos/setup-branch.sh",
+    "setup-pr": "./repos/setup-pr.sh",
+    "update-repo": "./repos/update-repo.sh"
   },
-  "keywords": ["browser", "automation", "playwright", "slack", "google-docs", "jira"],
+  "keywords": [
+    "ai-assistant",
+    "automation",
+    "browser-automation", 
+    "playwright",
+    "slack",
+    "google-docs", 
+    "jira",
+    "code-review",
+    "development-workflow",
+    "repository-management"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -24,5 +50,26 @@
   "devDependencies": {
     "typescript": "^5.0.0",
     "@types/node": "^20.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "bugs": {
+    "url": ""
+  },
+  "homepage": "docs/README.md",
+  "directories": {
+    "lib": "lib",
+    "doc": "docs"
+  },
+  "files": [
+    "lib/",
+    "skills/",
+    "repos/",
+    "docs/",
+    "scripts/",
+    "README.md",
+    ".env.example"
+  ]
 } 

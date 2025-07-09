@@ -198,4 +198,85 @@
 - Better state management for complex operations
 - Enhanced error detection and recovery
 - Performance optimization for large-scale operations
-- Integration with modern web automation frameworks 
+- Integration with modern web automation frameworks
+
+## Debugging Patterns (from temp file analysis)
+
+### Multi-Selector Fallback Strategy
+```javascript
+// Robust selector pattern for Slack input elements
+const inputSelectors = [
+  '.ql-editor',
+  '[data-qa="message_input"]',
+  '.c-texty_input',
+  'div[contenteditable="true"]',
+  'div[role="textbox"]',
+  '.p-message_input_field'
+];
+
+for (const selector of inputSelectors) {
+  try {
+    await page.waitForSelector(selector, { timeout: 5000 });
+    messageInput = await page.$(selector);
+    if (messageInput) break;
+  } catch (error) {
+    // Continue to next selector
+  }
+}
+```
+
+### Viewport Configuration for Element Visibility
+- Set viewport to 1920x1080 to ensure all elements are visible
+- Large viewports prevent elements from being outside the visible area
+- Essential for screenshot debugging and reliable element interaction
+
+### Content Clearing Technique
+```javascript
+// Reliable text clearing in Slack input
+await page.keyboard.down('Control');
+await page.keyboard.press('a');
+await page.keyboard.up('Control');
+await page.keyboard.press('Backspace');
+await page.waitForTimeout(500);
+```
+
+### Line-by-Line Typing with Proper Line Breaks
+```javascript
+// For multi-line content with preserved formatting
+for (let i = 0; i < lines.length; i++) {
+  const line = lines[i];
+  
+  if (line.trim()) {
+    await messageInput.type(line);
+  }
+  
+  // Shift+Enter for line break (not message send)
+  if (i < lines.length - 1) {
+    await page.keyboard.down('Shift');
+    await page.keyboard.press('Enter');
+    await page.keyboard.up('Shift');
+  }
+  
+  await page.waitForTimeout(30); // Inter-line delay
+}
+```
+
+### Content Verification Pattern
+```javascript
+// Verify content was properly typed
+const inputContent = await page.evaluate(() => {
+  const input = document.querySelector('.ql-editor, [data-qa="message_input"]');
+  return input ? input.textContent || input.innerText || input.value : '';
+});
+
+if (inputContent.length < 100) {
+  throw new Error('Content was not properly typed into the input field');
+}
+```
+
+### Screenshot-Based Debugging Workflow
+- Take "before" screenshot after navigation
+- Take "during" screenshot after typing content
+- Take "after" screenshot after sending message
+- Take "error" screenshot on any failure
+- Use descriptive filenames: `operation-state.png` 
