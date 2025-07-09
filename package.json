@@ -1,7 +1,7 @@
 {
-  "name": "ai-assistant",
+  "name": "eng-ai-assistant",
   "version": "1.0.0",
-  "description": "AI assistant skills for browser automation and web service interactions",
+  "description": "Eng AI Assistant skills for browser automation and web service interactions",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,9 +10,11 @@
     "gusto-slack-test": "node skills/gusto-slack/test-connection.js",
     "gusto-slack-post": "node skills/gusto-slack/post-announcement.js",
     "google-docs": "node skills/google-docs/google-docs-retriever.js",
-    "google-docs-test": "node skills/google-docs/test-connection.js"
+    "google-docs-test": "node skills/google-docs/test-connection.js",
+    "gusto-jira": "node skills/gusto-jira/jira-retriever.js",
+    "gusto-jira-test": "node skills/gusto-jira/test-connection.js"
   },
-  "keywords": ["browser", "automation", "playwright", "slack", "google-docs"],
+  "keywords": ["browser", "automation", "playwright", "slack", "google-docs", "jira"],
   "author": "",
   "license": "ISC",
   "dependencies": {

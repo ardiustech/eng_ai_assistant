@@ -1,6 +1,6 @@
 # Google Docs Skill
 
-This skill provides AI assistant capabilities for automated retrieval and manipulation of Google Docs content using browser automation with Microsoft Edge remote debugging.
+This skill provides Eng AI Assistant capabilities for automated retrieval and manipulation of Google Docs content using browser automation with Microsoft Edge remote debugging.
 
 ## Features
 
@@ -34,7 +34,7 @@ To retrieve content from a Google Doc:
 npm run google-docs "https://docs.google.com/document/d/YOUR_DOCUMENT_ID/edit"
 ```
 
-The AI assistant will:
+The Eng AI Assistant will:
 1. Connect to your authenticated Google session
 2. Navigate to the document
 3. Extract the full content and structure
@@ -66,7 +66,7 @@ Contains:
 This skill uses your existing Google authentication from the Edge browser:
 1. No passwords or credentials are stored
 2. Supports Google's 2FA/MFA
-3. Session persists between AI assistant operations
+3. Session persists between Eng AI Assistant operations
 
 ## Configuration
 

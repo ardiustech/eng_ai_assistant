@@ -1,10 +1,10 @@
 # Gusto Slack Skill
 
-This skill provides AI assistant capabilities for automated interaction with Gusto's Slack instance using Microsoft Edge with remote debugging.
+This skill provides Eng AI Assistant capabilities for automated interaction with Gusto's Slack instance using Microsoft Edge with remote debugging.
 
 ## Overview
 
-Instead of attempting to automate authentication, this skill connects to your existing Microsoft Edge browser session where you can manually handle login, MFA, and session management. The AI assistant creates new tabs to perform operations while preserving your authenticated session.
+Instead of attempting to automate authentication, this skill connects to your existing Microsoft Edge browser session where you can manually handle login, MFA, and session management. Eng AI Assistant creates new tabs to perform operations while preserving your authenticated session.
 
 ## Features
 
@@ -71,12 +71,12 @@ npm run gusto-slack-post announcement-file.txt
 node skills/gusto-slack/post-announcement.js announcement-file.txt
 ```
 
-## AI Assistant Workflow
+## Eng AI Assistant Workflow
 
 1. **First Run**: Skill launches Edge with remote debugging
 2. **Manual Authentication**: Complete Okta login, MFA in the browser
-3. **AI Operations**: AI assistant runs skill operations in new tabs
-4. **Session Persistence**: Your authentication persists across AI assistant operations
+3. **AI Operations**: Eng AI Assistant runs skill operations in new tabs
+4. **Session Persistence**: Your authentication persists across Eng AI Assistant operations
 
 ## Output
 

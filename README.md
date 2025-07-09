@@ -1,6 +1,6 @@
-# AI Assistant Skills
+# Eng AI Assistant Skills
 
-This repository provides AI assistant skills for browser automation and web service interactions using Microsoft Edge with remote debugging. This approach allows sharing authenticated sessions between manual browsing and automated AI assistant operations.
+This repository provides Eng AI Assistant skills for browser automation and web service interactions using Microsoft Edge with remote debugging. This approach allows sharing authenticated sessions between manual browsing and automated Eng AI Assistant operations.
 
 ## Tech Stack
 
@@ -12,13 +12,13 @@ This repository provides AI assistant skills for browser automation and web serv
 
 ## Architecture
 
-Instead of launching separate browser instances, this project connects to your existing Microsoft Edge browser where you can manually handle authentication, MFA, and session management. AI assistant skills create new tabs to perform operations while preserving your authenticated sessions.
+Instead of launching separate browser instances, this project connects to your existing Microsoft Edge browser where you can manually handle authentication, MFA, and session management. Eng AI Assistant skills create new tabs to perform operations while preserving your authenticated sessions.
 
 ## Directory Structure
 
 - `lib/`: Shared browser automation utilities
   - `browser-helper.js`: Microsoft Edge remote debugging connection
-- `skills/`: AI assistant skills for various web services and automation tasks
+- `skills/`: Eng AI Assistant skills for various web services and automation tasks
   - `gusto-slack/`: Slack interaction skill for Gusto workspace
   - `google-docs/`: Google Docs content extraction and manipulation skill
 - `tmp/`: Temporary scripts (gitignored)
@@ -29,7 +29,7 @@ Instead of launching separate browser instances, this project connects to your e
 
 ### Gusto Slack Skill
 
-AI assistant skill for automated interaction with Gusto's Slack instance using shared Edge browser session.
+Eng AI Assistant skill for automated interaction with Gusto's Slack instance using shared Edge browser session.
 
 **Features:**
 - Manual authentication with session sharing
@@ -64,7 +64,7 @@ npm run gusto-slack-post better-estimates-2-launch-announcement-final.txt
 
 ### Google Docs Skill
 
-AI assistant skill for automated extraction and manipulation of Google Docs content with support for document structure and formatting.
+Eng AI Assistant skill for automated extraction and manipulation of Google Docs content with support for document structure and formatting.
 
 **Features:**
 - Extract full document content from Google Docs
@@ -110,12 +110,12 @@ node skills/google-docs/google-docs-retriever.js local-file.docx
    npm run google-docs-test
    ```
 
-## AI Assistant Workflow
+## Eng AI Assistant Workflow
 
 1. **First Run**: Skill launches Microsoft Edge with remote debugging
 2. **Manual Authentication**: Complete login/MFA in the browser window
-3. **AI Operations**: AI assistant runs skills in new tabs, preserving your session
-4. **Session Persistence**: Authenticated state persists across AI assistant operations
+3. **AI Operations**: Eng AI Assistant runs skills in new tabs, preserving your session
+4. **Session Persistence**: Authenticated state persists across Eng AI Assistant operations
 
 ## Environment Variables
 
@@ -138,6 +138,6 @@ Current environment variables in `.env`:
 - **Flexible Interaction**: Skills can use browser automation, REST APIs, or hybrid approaches
 - **No Credential Storage**: Manual authentication, no stored passwords
 - **MFA Compatible**: Handle complex authentication flows manually
-- **Session Reuse**: Authenticated sessions persist between AI assistant operations
+- **Session Reuse**: Authenticated sessions persist between Eng AI Assistant operations
 - **Development Friendly**: Easy debugging with visible browser window
 - **Secure**: No automated credential handling or bypassing security measures
